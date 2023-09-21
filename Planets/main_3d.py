@@ -6,6 +6,8 @@ import time
 import scipy.constants as const
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+from mpl_toolkits.mplot3d import Axes3D
 
 dt = 30
 
@@ -17,21 +19,26 @@ def main():
                    speed=Vector(0, 0, 0), 
                    mass=10_000)
     moon = Planet(name="Moon", 
-                  position=Vector(3, 0, 0), 
+                  position=Vector(3, 0, 2), 
                   speed=Vector(0, sqrt(const.G  * 10_000 / 3) / 1.1, 0), 
                   mass=1)
     
     print(sqrt(const.G * 100_000 / 10))
 
-    fig, ax = plt.subplots()
-
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    
     x = [3]
     y = [0]
+    z = [2]
+
+    plt.ion()    ###
+    plt.show()
     
     print("{:<85} {:<10}".format(earth.name, moon.name))
 
     while(True):
-        F =  - const.G * earth.mass * moon.mass / earth.get_distance(moon) ** 2
+        F = const.G * earth.mass * moon.mass / earth.get_distance(moon) ** 2
 
         earth.position += earth.speed * dt
         moon.position += moon.speed * dt
@@ -44,19 +51,17 @@ def main():
             cur = time.time()
 
         ax.clear()
-        ln, = ax.plot(x, y, '-')
-        ax.set_xlim(-5, 5)
-        ax.set_ylim(-5, 5)
-
+        
         x.append(moon.position.x)
         y.append(moon.position.y)
+        z.append(moon.position.z)
 
-        ln.set_data(x, y)
-
-        plt.scatter(earth.position.x, earth.position.y)
-        plt.scatter(moon.position.x, moon.position.y)
+        ax.plot(np.array(x), np.array(y), np.array(z))    ###
+        ax.scatter(earth.position.x, earth.position.y, earth.position.z, c = 'g', s=100)
+        ax.scatter(moon.position.x, moon.position.y, moon.position.z, c = 'b', s=10)
+         
         plt.pause(1e-5)
-    plt.show()
+    plt.draw()
 
 
 if __name__ == '__main__':
