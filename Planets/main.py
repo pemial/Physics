@@ -21,7 +21,7 @@ def main():
                   speed=Vector(0, sqrt(const.G  * 10_000 / 3) / 1.1, 0), 
                   mass=1)
     
-    print(sqrt(const.G * 100_000 / 10))
+    print(sqrt(const.G * 10_000 / 3) / 1)
 
     fig, ax = plt.subplots()
 
@@ -31,7 +31,7 @@ def main():
     print("{:<85} {:<10}".format(earth.name, moon.name))
 
     while(True):
-        F =  - const.G * earth.mass * moon.mass / earth.get_distance(moon) ** 2
+        F = const.G * earth.mass * moon.mass / earth.get_distance(moon) ** 2
 
         earth.position += earth.speed * dt
         moon.position += moon.speed * dt
