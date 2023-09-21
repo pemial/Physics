@@ -21,7 +21,7 @@ def main():
                   speed=Vector(0, sqrt(const.G  * 10_000 / 3), 0),
                   mass=1)
     
-    print(sqrt(const.G * 100_000 / 10))
+    print(sqrt(const.G * 10_000 / 3) / 1)
 
     fig, ax = plt.subplots()
 
