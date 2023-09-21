@@ -1,5 +1,6 @@
 from math import sqrt
 
+
 class Vector:
     def __init__(self, x: float, y: float, z: float):
         self.x = x
@@ -25,20 +26,22 @@ class Vector:
     def __str__(self):
      return "x:{:<25}  y:{:<25}  z:{:<25}".format(self.x, self.y, self.z)
 
+    def __truediv__(self, other: float):
+        return Vector(self.x / other, self.y / other, self.z / other)
+
     def get_distance(self):
         return sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
     
 
-
 class Planet:
-    def __init__(self, name:str, position: Vector, speed: Vector, mass: float):
+    def __init__(self, name: str, position: Vector, speed: Vector, mass: float):
         self.name = name
         self.position = position
         self.speed = speed
         self.mass = mass
         
     def __str__(self):
-     return "Planet {}".format(name)
+        return "Planet {}".format(self.name)
 
     def get_r(self, another_planet):
         return self.position - another_planet.position
