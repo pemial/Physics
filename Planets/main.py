@@ -1,6 +1,5 @@
 from Planet import *
 from math import sqrt
-from varname import nameof
 
 import time
 import scipy.constants as const
