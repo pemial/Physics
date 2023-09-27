@@ -1,51 +1,56 @@
-from Planet import *
-from math import sqrt
-import time
-import numpy as np
-import matplotlib.pyplot as plt
+from physics import *
+from visualization import *
 
-G = 6.6743e-11
-dt = 30
+MOON_MASS = 7.36e22                 # kg
+EARTH_MASS = 5.9742e24              # kg
+SUN_MASS = 1.98892e30               # kg
+
+MOON_EARTH_DISTANCE = 3.844e8       # meters
+EARTH_SUN_DISTANCE = 1.49597e11     # meters
+
+MOON_EARTH_SPEED = 1.021e3          # m/sec
+EARTH_SUN_SPEED = 2.9765e4          # m/sec
 
 
 def main():
-    cur = time.time()
-    A = Planet(Vector(0, 0, 0), Vector(0, 0, 0), 10_000)
-    B = Planet(Vector(3, 0, 0), Vector(0, sqrt(G * 10_000 / 3) / 1.1, 0), 1)
-    print(sqrt(G * 100_000 / 10))
+    current = time.time()
 
-    fig, ax = plt.subplots()
+    earth = MaterialPoint(name="Earth",
+                          position=Vector(1, 0, 0) * EARTH_SUN_DISTANCE,
+                          speed=Vector(0, 1, 0) * EARTH_SUN_SPEED,
+                          mass=EARTH_MASS)
 
-    x = [3]
-    y = [0]
+    moon = MaterialPoint(name="Moon",
+                         position=Vector(1, 0, 0) * (EARTH_SUN_DISTANCE + MOON_EARTH_DISTANCE),
+                         speed=Vector(0, 1, 0) * (EARTH_SUN_SPEED + MOON_EARTH_SPEED),
+                         mass=MOON_MASS)
 
-    while(True):
-        F = G * A.mass * B.mass / A.get_distance(B) ** 2
+    sun = MaterialPoint(name="Sun",
+                        position=Vector(0, 0, 0),
+                        speed=Vector(0, 0, 0),
+                        mass=SUN_MASS)
 
-        A.position += A.speed * dt
-        B.position += B.speed * dt
+    speed = sqrt(const.G * 1 / 2)
+    A = MaterialPoint(name="A",
+                      position=Vector(1, 0, 0),
+                      speed=Vector(1 / 2, sqrt(3) / 2, 0) * speed,
+                      mass=1)
 
-        A.speed -= F / A.mass / A.get_distance(B) * A.get_r(B) * dt
-        B.speed += F / B.mass / A.get_distance(B) * A.get_r(B) * dt
+    B = MaterialPoint(name="B",
+                      position=Vector(-1, 0, 0),
+                      speed=Vector(1 / 2, -sqrt(3) / 2, 0) * speed,
+                      mass=1)
 
-        if time.time() - cur > 0.5:
-            print(A.position.x, A.position.y, A.position.z, "      ", B.position.x, B.position.y, B.position.z)
-            cur = time.time()
+    C = MaterialPoint(name="C",
+                      position=Vector(0, sqrt(3), 0),
+                      speed=Vector(-1, 0, 0) * speed,
+                      mass=1)
 
-        ax.clear()
-        ln, = ax.plot(x, y, '-')
-        ax.set_xlim(-5, 5)
-        ax.set_ylim(-5, 5)
+    planet_system = ClosedSystem(bodies=[A, B, C])
+    artist_3d = Artist3D()
 
-        x.append(B.position.x)
-        y.append(B.position.y)
-
-        ln.set_data(x, y)
-
-        plt.scatter(A.position.x, A.position.y)
-        plt.scatter(B.position.x, B.position.y)
-        plt.pause(1e-5)
-    plt.show()
+    simulator = SysytemSimulator(system=planet_system, artist=artist_3d)
+    simulator.simulate(duration=float(32_000_000))  # * sec or 1 year
 
 
 if __name__ == '__main__':
