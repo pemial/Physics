@@ -97,9 +97,12 @@ class ClosedSystem:
         for i in range(self.count): 
             for j in range(self.count): 
                 if i != j: 
-                    a = - (const.G * self.bodies[i].mass * self.bodies[j].position) / (self.bodies[j].get_distance(self.bodies[i]) ** 3)
-                    self.bodies[j].update_speed(a * (dt / 2))
-                    self.bodies[j].update_position(self.bodies[j].speed * dt)
+                    a = - (const.G * self.bodies[j].mass * self.bodies[i].position) / (self.bodies[i].get_distance(self.bodies[j]) ** 3)
+                    
+                    print("Updated ", self.bodies[i]," suffer from ", self.bodies[j], ". Position values is ", self.bodies[i].position)
+                    self.bodies[i].update_speed(a * (dt / 2))
+                    self.bodies[i].update_position(self.bodies[i].speed * dt)
+        print("Updated ended.")
                 
 
 
