@@ -1,4 +1,5 @@
 from math import sqrt
+from varname import nameof
 
 import scipy.constants as const
         
@@ -11,45 +12,39 @@ class Vector:
         self.z = z
         
     def __neg__(self):
-        self.x = -self.x
-        self.y = -self.y
-        self.z = -self.z
-        return self
+        return Vector(-self.x, 
+                      -self.y, 
+                      -self.z)
 
     def __sub__(self, other):
-        self.x -= other.x
-        self.y -= other.y
-        self.z -= other.z
-        return self
+        return Vector(self.x - other.x,
+                      self.y - other.y,
+                      self.z - other.z)
 
     def __add__(self, other):
-        self.x += other.x
-        self.y += other.y
-        self.z += other.z
-        return self
+        return Vector(self.x + other.x,
+                      self.y + other.y,
+                      self.z + other.z)
 
     def __mul__(self, multiplier: float):
-        self.x *= multiplier
-        self.y *= multiplier
-        self.z *= multiplier
-        return self
+        return Vector(multiplier * self.x, 
+                      multiplier * self.y,  
+                      multiplier * self.z)
 
     def __rmul__(self, multiplier: float): # commutative
-        self.x *= multiplier
-        self.y *= multiplier
-        self.z *= multiplier
-        return self
+        return Vector(multiplier * self.x, 
+                      multiplier * self.y, 
+                      multiplier * self.z)
 
     def __truediv__(self, divider: float):
-        self.x /= divider
-        self.y /= divider
-        self.z /= divider
-        return self
+        return Vector(self.x / divider, 
+                      self.y / divider, 
+                      self.z / divider)
         
     def __str__(self):
      return "x:{:<25}  y:{:<25}  z:{:<25}".format(self.x, self.y, self.z)
 
-    def get_distance(self):
+    def get_length(self) -> float:
         return sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
  
@@ -57,7 +52,7 @@ class Point:
     def __init__(self, 
                  name: str, 
                  position: Vector, 
-                 speed: Vector = Vector(0, 0, 0)):
+                 speed: Vector = Vector(+0, +0, +0)):
         self.name = name
         self.position = position
         self.speed = speed
@@ -65,8 +60,8 @@ class Point:
     def get_r(self, another):
         return self.position - another.position
     
-    def get_distance(self, another):
-        return self.get_r(another).get_distance()
+    def get_distance(self, another) -> float:
+        return self.get_r(another).get_length()
        
     
 # mass : kg,  position: m, speed: m/sec
@@ -100,9 +95,11 @@ class ClosedSystem:
         
     def update(self, dt: float): 
         for i in range(self.count): 
-            for j in range(i + 1, self.count): 
-                a = - (const.G * self.bodies[j].mass * self.bodies[j].position) / self.bodies[j].get_distance(self.bodies[i])
-                self.bodies[j].update_speed(a * (dt / 2))
-                self.bodies[j].update_position(self.bodies[j].speed * dt)
+            for j in range(self.count): 
+                if i != j: 
+                    a = - (const.G * self.bodies[i].mass * self.bodies[j].position) / (self.bodies[j].get_distance(self.bodies[i]) ** 3)
+                    self.bodies[j].update_speed(a * (dt / 2))
+                    self.bodies[j].update_position(self.bodies[j].speed * dt)
+                
 
 

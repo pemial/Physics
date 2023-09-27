@@ -3,15 +3,21 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
 import time
+import random
 
 from physics import * 
         
-        
+number_of_colors = 8
+
+color = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+             for i in range(number_of_colors)]
+
+
 class Artist3D(): 
-    def __init__(self): # update_period in sec
+    def __init__(self):
         self.fig = plt.figure()
-        
         self.ax = self.fig.add_subplot(111, projection='3d')
+        
         self.points = dict()
         self.ax.set_xlim(-4e8, 4e8)
         self.ax.set_ylim(-4e8, 4e8)
@@ -23,17 +29,17 @@ class Artist3D():
     def display(self, points: [MaterialPoint]): 
         self.ax.clear()
         
-        for point in points: 
+        for i in range(len(points)): 
             
-            if point.name not in self.points.keys():
-                self.points[point.name] = [[], [], []]
+            if points[i].name not in self.points.keys():
+                self.points[points[i].name] = [[], [], []]
             else:
-                self.points[point.name][0].append(point.position.x)
-                self.points[point.name][1].append(point.position.y)
-                self.points[point.name][2].append(point.position.z)
+                self.points[points[i].name][0].append(points[i].position.x)
+                self.points[points[i].name][1].append(points[i].position.y)
+                self.points[points[i].name][2].append(points[i].position.z)
 
-            self.ax.plot(self.points[point.name][0], self.points[point.name][1], self.points[point.name][2])  
-            self.ax.scatter(point.position.x, point.position.y, point.position.z, c='g', s=100)
+            self.ax.plot(self.points[points[i].name][0], self.points[points[i].name][1], self.points[points[i].name][2])  
+            self.ax.scatter(points[i].position.x, points[i].position.y, points[i].position.z, c=color[i+2], s=points[i].mass / 1.0e21) # ? Need to change the norming
 
         plt.pause(1e-10)
         
@@ -45,7 +51,7 @@ class SysytemSimulator:
         self.begining = time.time()
         self.update_period = update_period
        
-    # sec 
+    # * sec 
     def simulate(self, duration: float): 
         
         current_time = time.time()
@@ -54,6 +60,6 @@ class SysytemSimulator:
             if (time.time() - current_time) > self.update_period:
                     current_time = time.time()
                     self.artist.display([body for body in self.model.bodies])
-                    self.model.update(0.1)
+                    self.model.update(84_600) # * Accuracy is 1 day or 24 hours
      
             

@@ -1,61 +1,29 @@
-from Planet import *
-from math import sqrt
+from physics import *
+from visualization import *
 
-import time
-import scipy.constants as const
-import numpy as np
-import matplotlib.pyplot as plt
-
-dt = 30
+MOON_MASS = 7.36e22       # * kg
+EARTH_MASS = 5.9742e24    # * kg
+DISTANCE = 384_400_000    # * meters
 
 
 def main():
-    cur = time.time()
-    earth = Planet(name="Earth", 
-                   position=Vector(0, 0, 0), 
-                   speed=Vector(0, 0, 0), 
-                   mass=10_000)
-    moon = Planet(name="Moon", 
-                  position=Vector(3, 0, 0), 
-                  speed=Vector(0, sqrt(const.G  * 10_000 / 3), 0),
-                  mass=1)
+    current = time.time()
     
-    print(sqrt(const.G * 10_000 / 3) / 1)
-
-    fig, ax = plt.subplots()
-
-    x = [3]
-    y = [0]
+    earth = MaterialPoint(name="Earth", 
+                   position=Vector(+0, +0, +0), 
+                   speed=Vector(+0, +0, +0),
+                   mass=EARTH_MASS)
     
-    print("{:<85} {:<10}".format(earth.name, moon.name))
-
-    while(True):
-        F = const.G * earth.mass * moon.mass / earth.get_distance(moon) ** 2
-
-        earth.position += earth.speed * dt
-        moon.position += moon.speed * dt
-
-        earth.speed -= F / earth.mass / earth.get_distance(moon) * earth.get_r(moon) * dt
-        moon.speed += F / moon.mass / earth.get_distance(moon) * earth.get_r(moon) * dt
-
-        if time.time() - cur > 0.5:
-            print(earth.position, moon.position)
-            cur = time.time()
-
-        ax.clear()
-        ln, = ax.plot(x, y, '-')
-        ax.set_xlim(-5, 5)
-        ax.set_ylim(-5, 5)
-
-        x.append(moon.position.x)
-        y.append(moon.position.y)
-
-        ln.set_data(x, y)
-
-        plt.scatter(earth.position.x, earth.position.y)
-        plt.scatter(moon.position.x, moon.position.y)
-        plt.pause(1e-5)
-    plt.show()
+    moon = MaterialPoint(name="Moon", 
+                  position=Vector(DISTANCE, +0, +0),
+                  speed=Vector(0, 1, 0) * sqrt(const.G * EARTH_MASS / DISTANCE) / 2,
+                  mass=MOON_MASS)
+    
+    planet_system = ClosedSystem(bodies=[earth, moon])
+    artist_3d = Artist3D()
+    
+    simulator = SysytemSimulator(system=planet_system, artist=artist_3d)
+    simulator.simulate(duration=float(32_000_000)) # * sec or 1 year
 
 
 if __name__ == '__main__':
