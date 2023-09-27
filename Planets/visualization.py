@@ -52,7 +52,7 @@ class SysytemSimulator:
         self.update_period = update_period
 
     # * sec
-    def simulate(self, duration: float):
+    def simulate(self, duration: float, dt: float):
 
         current_time = time.time()
 
@@ -60,4 +60,4 @@ class SysytemSimulator:
             if (time.time() - current_time) > self.update_period:
                 current_time = time.time()
                 self.artist.display([body for body in self.model.bodies])
-            self.model.update(3)  # * Accuracy is 1 day or 24 hours
+            self.model.update(dt)  # * Accuracy is 1 day or 24 hours
