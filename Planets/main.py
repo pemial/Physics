@@ -1,25 +1,44 @@
-from Planet import *
+from Solar_system import *
 
-dt = 5                    #sec
 MOON_MASS = 7.36e22       #kg
-PLANET_MASS = 5.9742e24   #kg
-DISTANCE = 384_400_000    #meters
+EARTH_MASS = 5.9742e24   #kg
+SUN_MASS = 1.989e30       #kg
+DISTANCE_MOON = 384_400_000    #meters
+DISTANCE_EARTH = 150_181_218_000 #meters
+EARTH_VEL = 30_000    #m/s
+MOON_VEL = 1_022      #m/s
+
+solar_system = SolarSystem(400, projection_2d=True)
+
+# sun = Sun(solar_system, mass=1.989e30)
+
+# planets = (
+#     Planet( #Earth
+#         solar_system,
+#         mass=5.9742e24,
+#         position=(150_181_218_000, 0, 0),
+#         velocity=Vector(0, 30_000, 0),
+#     )
+# )
 
 
-def main():
-    current = time.time()
-    earth = Planet(name="Earth", 
-                   position=Vector(0, 0, 0), 
-                   speed=Vector(0, 0, 0),
-                   mass=PLANET_MASS)
-    moon = Planet(name="Moon", 
-                  position=Vector(DISTANCE, 0, 0),
-                  speed=Vector(0, 1, 0) * sqrt(const.G * PLANET_MASS / DISTANCE) / 2,
-                  mass=MOON_MASS)
-    
-    earth.visualize_2body(moon, current, dt)
+sun = Sun(solar_system, mass=10_000)
+planets = (
+    Planet(
+        solar_system,
+        mass=100,
+        position=(500, 0, 0),
+        velocity=(1, 5, 5),
+    ),
+    Planet(
+        solar_system,
+        mass=10,
+        position=(600, 0, 0),
+        velocity=(1, 0, 0)
+    )
+)
 
-
-
-if __name__ == '__main__':
-    main()
+while True:
+    solar_system.calculate_all_body_interactions()
+    solar_system.update_all()
+    solar_system.draw_all()
