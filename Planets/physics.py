@@ -83,15 +83,70 @@ class MaterialPoint(Point):
     def update_position(self, increment: float):
         self.position += increment
 
+    def get_kinetic_energy(self) -> float:
+        return (self.mass * self.speed.get_length() ** 2) / 2
+
+    def add_kinetic_energy(self, dE: float):
+        v = sqrt(2 * (self.get_kinetic_energy() + dE) / self.mass)
+        self.speed = self.speed / self.speed.get_length() * v
+
+    def get_potential(self) -> Vector:
+        return self.mass * self.speed
+
+    def add_potential(self, dp):
+        self.speed += dp / self.mass
+
 
 class ClosedSystem:
     def __init__(self, bodies: [MaterialPoint]):
         self.bodies = bodies
         self.count = len(self.bodies)
+        self.E = self.get_full_energy()
+        self.p = self.get_potential()
+
+    def get_mass(self) -> float:
+        mass = 0
+        for body in self.bodies:
+            mass += body.mass
+        return mass
 
     def append(self, point: MaterialPoint):
         self.bodies.append(point)
         self.count = len(self.bodies)
+
+    def get_full_energy(self) -> float:
+        return self.get_potential_energy() + self.get_kinetic_energy()
+
+    def get_potential_energy(self) -> float:
+        U = 0
+        for i in range(0, self.count):
+            for j in range(0, i):
+                U += -const.G * self.bodies[i].mass * self.bodies[j].mass / self.bodies[i].get_distance(self.bodies[j])
+        return U
+
+    def get_kinetic_energy(self) -> float:
+        K = 0
+        for body in self.bodies:
+            K += body.get_kinetic_energy()
+        return K
+
+    def check_energy_conservation(self):
+        dE = self.E - self.get_full_energy()
+        K = self.get_kinetic_energy()
+        for body in self.bodies:
+            body.add_kinetic_energy(dE * body.get_kinetic_energy() / K)
+
+    def get_potential(self) -> Vector:
+        p = Vector(0, 0, 0)
+        for body in self.bodies:
+            p += body.get_potential()
+        return p
+
+    def check_potential_conservation(self):
+        dp = self.p - self.get_potential()
+        mass = self.get_mass()
+        for body in self.bodies:
+            body.add_potential(dp * body.mass / mass)
 
     def update(self, dt: float):
         a = []
@@ -106,3 +161,6 @@ class ClosedSystem:
             self.bodies[i].update_position(self.bodies[i].speed * dt)
         for i in range(self.count):
             self.bodies[i].update_speed(a[i] * dt)
+
+        self.check_energy_conservation()
+        self.check_potential_conservation()

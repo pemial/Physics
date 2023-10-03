@@ -62,11 +62,12 @@ def main():
                       speed=Vector(-1, 0, 0) * speed,
                       mass=1)
 
-    planet_system = ClosedSystem(bodies=[mercury, sun, earth, moon, venus])
+    planet_system = ClosedSystem(bodies=[A, B, C])
+    # planet_system = ClosedSystem(bodies=[sun, mercury, venus, earth, moon])
     artist_3d = Artist3D()
 
-    simulator = SysytemSimulator(system=planet_system, artist=artist_3d)
-    simulator.simulate(duration=float(32_000_000), dt=500)  # * sec or 1 year
+    simulator = SystemSimulator(system=planet_system, artist=artist_3d)
+    simulator.simulate(duration=float(32_000_000), dt=10)
 
 
 if __name__ == '__main__':

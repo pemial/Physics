@@ -13,7 +13,7 @@ color = ["#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
          for i in range(number_of_colors)]
 
 
-class Artist3D():
+class Artist3D:
     def __init__(self):
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111, projection='3d')
@@ -44,20 +44,20 @@ class Artist3D():
         plt.pause(1e-10)
 
 
-class SysytemSimulator:
-    def __init__(self, system: ClosedSystem, artist: Artist3D, update_period: float = 0.05):
+class SystemSimulator:
+    def __init__(self, system: ClosedSystem, artist: Artist3D, update_period: float = 0.1):
         self.model = system
         self.artist = artist
-        self.begining = time.time()
+        self.beginning = time.perf_counter()
         self.update_period = update_period
 
     # * sec
     def simulate(self, duration: float, dt: float):
 
-        current_time = time.time()
+        current_time = time.perf_counter()
 
-        while (self.begining + duration > current_time):
-            if (time.time() - current_time) > self.update_period:
-                current_time = time.time()
+        while self.beginning + duration > current_time:
+            if (time.perf_counter() - current_time) > self.update_period:
                 self.artist.display([body for body in self.model.bodies])
-            self.model.update(dt)  # * Accuracy is 1 day or 24 hours
+                current_time = time.perf_counter()
+            self.model.update(dt)
