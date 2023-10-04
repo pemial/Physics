@@ -8,33 +8,22 @@ DISTANCE_EARTH = 150_181_218_000 #meters
 EARTH_VEL = 30_000    #m/s
 MOON_VEL = 1_022      #m/s
 
-solar_system = SolarSystem(400, projection_2d=True)
+solar_system = SolarSystem(500, projection_2d=True)
 
-# sun = Sun(solar_system, mass=1.989e30)
+sun = Sun(solar_system)
 
-# planets = (
-#     Planet( #Earth
-#         solar_system,
-#         mass=5.9742e24,
-#         position=(150_181_218_000, 0, 0),
-#         velocity=Vector(0, 30_000, 0),
-#     )
-# )
-
-
-sun = Sun(solar_system, mass=10_000)
 planets = (
     Planet(
         solar_system,
-        mass=100,
-        position=(500, 0, 0),
-        velocity=(1, 5, 5),
+        mass=10,
+        position=(200, 50, 0),
+        velocity=(0, 5, 5),
     ),
     Planet(
         solar_system,
-        mass=10,
-        position=(600, 0, 0),
-        velocity=(1, 0, 0)
+        mass=5,
+        position=(200, -50, 150),
+        velocity=(5, 0, 0)
     )
 )
 

@@ -36,9 +36,9 @@ class Body:
 
     def move(self):
         self.position = (
-            self.position[0] + self.velocity[0],
-            self.position[1] + self.velocity[1],
-            self.position[2] + self.velocity[2],
+            self.position[0] + self.velocity[0] ,
+            self.position[1] + self.velocity[1] ,
+            self.position[2] + self.velocity[2] ,
         )
 
     def draw(self):
