@@ -6,7 +6,7 @@ import scipy.constants as const
 import numpy as np
 import matplotlib.pyplot as plt
 
-dt = 30
+dt = 5
 
 
 def main():
