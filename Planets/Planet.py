@@ -121,7 +121,7 @@ class Planet:
                 planet_coord[0].append(self.position.x)
                 planet_coord[1].append(self.position.y)
 
-            if lab_time_day > 400 and time.process_time_ns() - current_time >= DRAW_NS_DELTA:
+            if lab_time_day > 15 and time.process_time_ns() - current_time >= DRAW_NS_DELTA:
                 # print("########################################")
                 # print(-1 * const.G * self.mass * moon.mass / self.get_distance(
                 #     moon))
@@ -196,5 +196,5 @@ class Planet:
 
                 if self.get_distance(moon) < CRITICAL_DISTANCE:
                     plt.show()
-                    break;
+                    break
 

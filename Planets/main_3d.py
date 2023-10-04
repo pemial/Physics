@@ -1,13 +1,13 @@
 import time
 
 from Planet import *
-dt = 10            #sec
+dt = 1            #sec
 # MOON_MASS = 7.36e22       #kg
 MOON_MASS = 100
 PLANET_MASS = 5.9742e24   #kg
 # DISTANCE = 384_400_000    #meters
 DISTANCE = 6_390_000
-MOON_SPEED = 11200       #meters per seconds
+MOON_SPEED = 9000       #meters per seconds
 
 
 def main():
