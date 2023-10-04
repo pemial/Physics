@@ -121,7 +121,8 @@ class ClosedSystem:
         U = 0
         for i in range(0, self.count):
             for j in range(0, i):
-                U += -const.G * self.bodies[i].mass * self.bodies[j].mass / self.bodies[i].get_distance(self.bodies[j])
+                U += -const.G * self.bodies[i].mass * \
+                    self.bodies[j].mass / self.bodies[i].get_distance(self.bodies[j])
         return U
 
     def get_kinetic_energy(self) -> float:
