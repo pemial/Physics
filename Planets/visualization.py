@@ -39,7 +39,7 @@ class Artist3D():
                 self.points[points[i].name][2].append(points[i].position.z)
 
             self.ax.plot(self.points[points[i].name][0], self.points[points[i].name][1], self.points[points[i].name][2])  
-            self.ax.scatter(points[i].position.x, points[i].position.y, points[i].position.z, c=color[i+2], s=200) # ? Need to change the norming
+            self.ax.scatter(points[i].position.x, points[i].position.y, points[i].position.z, c=color[i+1], s=50) # ? Need to change the norming
 
         plt.pause(1e-15)
         
@@ -52,7 +52,7 @@ class SysytemSimulator:
         self.update_period = update_period
        
     # * sec 
-    def simulate(self, duration: float): 
+    def simulate(self, duration: float, dt: float): 
         
         current_time = time.time()
         
@@ -60,6 +60,4 @@ class SysytemSimulator:
             if (time.time() - current_time) > self.update_period:
                     current_time = time.time()
                     self.artist.display([body for body in self.model.bodies])
-                    self.model.update(40_600) # * Accuracy is 1/4 day or 6 hours
-     
-            
+            self.model.update(dt) # * Accuracy is 1 sec
