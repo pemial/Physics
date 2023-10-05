@@ -160,6 +160,6 @@ class ClosedSystem:
         for i in range(self.count):
             self.bodies[i].update_speed(a[i] * dt)
             self.bodies[i].update_position(self.bodies[i].speed * dt)
-            # self.check_energy_conservation()
+        self.check_energy_conservation()
         #
                 
