@@ -7,28 +7,25 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 class Molecule(object):
-    #Constructor
-    def __init__(self,molecule,position,velocity,mass,color="black"):
+    def __init__(self, molecule, position: list, velocity: list, mass, color="black"):
         self.molecule=molecule
-        self.position=np.array([x_i for x_i in position])
-        self.velocity=np.array([v_i for v_i in velocity])
+        self.position=np.array(position)
+        self.velocity=np.array(velocity)
         self.mass=mass
         self.color=color
-       
-    #Setters for position, velocity, mass and color
-    def set_position(self,position):
-        self.position=np.array([x_i for x_i in position])
+
+    def set_position(self, position: list):
+        self.position=np.array(position)
         
-    def set_velocity(self,velocity):
-        self.velocity=np.array([v_i for v_i in velocity])
+    def set_velocity(self, velocity: list):
+        self.velocity=np.array(velocity)
         
     def set_color(self,color):
         self.color=color
     
     def set_mass(self,mass):
         self.mass=mass
-        
-    #Getters for position, velocity, mass and color
+
     def get_position(self):
         return self.position
     
