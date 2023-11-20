@@ -73,7 +73,7 @@ sheet.circular_aperture(x0 = 0, y0 = 0, r = 10 * mm)
 z = 5000
 
 # wavelength (mm)
-λ = 18.5*1e-7
+λ = 6*1e-7       #natural sunlight
 k = 2*np.pi/λ
 
 fft_c = fft2(sheet.E * np.exp(1j * k/(2*z) *(sheet.xx**2 + sheet.yy**2)))
